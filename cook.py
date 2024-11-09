@@ -2,6 +2,7 @@ import os
 import time
 from pprint import pprint
 import json
+from glob import glob
 
 # cook_data={
 #   'Омлет': [
@@ -91,72 +92,32 @@ def get_shop_list_by_dishes(dishes, person_count):
     return ingr_list
 
 
-def rewrite_file(path1=None, path2=None, path3=None):
-    if path1 or path2 or path3 is None:
-        path1 = '1.txt'
-        path2 = '2.txt'
-        path3 = '3.txt'
-        outout_file = "rewrite_file.txt"
-        file1_path = os.path.join(os.getcwd(), path1)
-        file2_path = os.path.join(os.getcwd(), path2)
-        file3_path = os.path.join(os.getcwd(), path3)
-        with open(file1_path, 'r', encoding='utf-8') as f1:
-            file1 = f1.readlines()
-        with open(file2_path, 'r', encoding='utf-8') as f2:
-            file2 = f2.readlines()
-        with open(file3_path, 'r', encoding='utf-8') as f3:
-            file3 = f3.readlines()
-        with open(outout_file, 'w', encoding='utf-8') as f_total:
+def rewrite_file():
+    outout_file = "rewrite_file.txt"
+    comparsion_list = {}
 
-            if len(file1) < len(file2) and len(file1) < len(file3):
-                f_total.write(path1 + '\n')
-                f_total.write(str(len(file1)) + '\n')
-                f_total.writelines(file1)
-                f_total.write('\n')
-            elif len(file2) < len(file1) and len(file2) < len(file3):
-                f_total.write(path2 + '\n')
-                f_total.write(str(len(file2)) + '\n')
-                f_total.writelines(file2)
-                f_total.write('\n')
-            elif len(file3) < len(file1) and len(file3) < len(file2):
-                f_total.write(path3 + '\n')
-                f_total.write(str(len(file3)) + '\n')
-                f_total.writelines(file3)
-                f_total.write('\n')
-            if len(file2) > len(file1) > len(file3) or len(file2) < len(file1) < len(
-                    file3):
-                f_total.write(path1 + '\n')
-                f_total.write(str(len(file1)) + '\n')
-                f_total.writelines(file1)
-                f_total.write('\n')
-            elif len(file1) > len(file2) > len(file3) or len(file2) > len(file1) and len(file2) < len(
-                    file3):
-                f_total.write(path2 + '\n')
-                f_total.write(str(len(file2)) + '\n')
-                f_total.writelines(file2)
-                f_total.write('\n')
-            elif len(file1) > len(file3) > len(file2) or len(file3) > len(file1) and len(file3) < len(
-                    file2):
-                f_total.write(path3 + '\n')
-                f_total.write(str(len(file3)) + '\n')
-                f_total.writelines(file3)
-                f_total.write('\n')
-            if len(file1) > len(file2) and len(file1) > len(file3):
-                f_total.write(path1 + '\n')
-                f_total.write(str(len(file1)) + '\n')
-                f_total.writelines(file1)
-            elif len(file2) > len(file1) and len(file2) > len(file3):
-                f_total.write(path2 + '\n')
-                f_total.write(str(len(file2)) + '\n')
-                f_total.writelines(file2)
-            elif len(file3) > len(file1) and len(file3) > len(file2):
-                f_total.write(path3 + '\n')
-                f_total.write(str(len(file3)) + '\n')
-                f_total.writelines(file3)
-    else:
-        print('Давай лучше без параметров')
+    with open (outout_file, 'w'):
+        pass
+    for files_read in glob('dir3dz/*.txt'):
+        name_read = files_read.split('\\')[1]
+        file_path = os.path.join(os.getcwd(), files_read)
+        with open(file_path, 'r', encoding='utf-8') as f:
+            file_read = f.readlines()
+        comparsion_list[name_read] = len(file_read)
+
+    comparsion_list = sorted(comparsion_list.items(), key=lambda item: item[1])
+
+    for item in comparsion_list:
+        name = 'dir3dz/' + item[0]
+        file_path = os.path.join(os.getcwd(), name)
+        with open(file_path, 'r', encoding='utf-8') as f:
+            file_write = f.readlines()
+        with open(outout_file, 'a', encoding='utf-8') as f_total:
+            f_total.write(item[0] + '\n')
+            f_total.write(str(len(file_write)) + '\n')
+            f_total.writelines(file_write)
+            f_total.write('\n')
     return
-
 
 if __name__ == '__main__':
     filename = "book_cook.txt"
